@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>VBA</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">home page</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Home page</a></li>
+							<li class="active"><a href="VBA.html">VBA</a></li>
+							<li><a href="SQL.html">sql</a></li>
+							<li><a href="Tableau.html">tableau</a></li>
+							<li><a href="Python.html">python</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>VBA - FUND PRICE AUTOMATION MACRO <br />
+									</h1>
+									<p>This article provides a detailed, step-by-step explanation on my VBA project. <br>
+										If you would like to review the VBA macro file and the full code script, please visit my GitHub page at <a href="https://github.com/kurtislamtk/VBA_Portfolio_Project"target="_blank">here</a>.</p>
+									</header>
+									<p>In this project, the key objective is to automate the process of updating fund price to enhance efficiency. The data source from this project is fund price data obtained from multiple fund houses. The fund prices are publicly available and can be accessed through the internet.</p>
+									1. Prepare data sourcce
+									<p>The fund price data is collected and downloaded into a designated folder. In this project, the fund prices for the date 5/5 are gathered, and it is assumed that a total of 24 fund prices will be updated.</p>
+									<p>Furthermore, exchange rates will also be updated in this project. The exchange rate data is collected from the HKAB website and the rates are manually inputted into an Excel file named "Fx rate template".</p>
+									Fx rate template:
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code25.png" alt="" style="width: 400px; height: 300px;" /></div>
+									2. Input fund price date
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code21.png" alt="" style="width: 700px; height: 300px;" /></div>
+									<p>Press "Start" button in the VBA macro to execute the macro.</p>	
+									<p>An interactive box will prompt the user to enter the date of the fund price (i.e. 2023-05-05 in this project). A loop mechanism ensures that only valid dates are accepted, prompting the user to re-enter if an invalid date is provided.</p>
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code22.png" alt="" style="width: 400px; height: 200px;" /></div>
+									3. Merge data source to the excel
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code23.png" alt="" style="width: 950px; height: 300px;" /></div>
+										Another interactive box will appear, allowing the user to select the desired data source. Once selected, the data source will be merged into the macro excel file as individual spreadsheets.
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code24.png" alt="" style="width: 600px; height: 400px;" /></div>
+									Result:
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/spreadsheet.png" alt="" style="width: 600px; height: 40px;" /></div>
+									4. Find fund price from data source
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/code26.png" alt="" style="width: 700px; height: 300px;" /></div>
+									(Partial code is shown, i.e. only code of Fund1 and Fund2)
+									<p>The VBA macro will perform a data search and extraction process across all spreadsheets in the Excel file. It will extract targeted prices based on specified criteria, such as ISIN. If the extraction is successful, the fund prices will be automatically updated.</p>
+									Result:
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/price.png" alt="" style="width: 800px; height: 300px;" /></div>
+									5. Find exchange rate from data source
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/fx rate.png" alt="" style="width: 600px; height: 300px;" /></div>
+									<p>The VBA macro will automatically update the exchange rate using the same approach.</p>
+									Result:
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/fx.png" alt="" style="width: 550px; height: 100px;" /></div>
+									6. Save the file as a new excel to a designated path
+									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+										<img src="images/save.png" alt="" style="width: 550px; height: 150px;" /></div>
+									<p>Upon completion, the file will be automatically saved with a name corresponding to the fund price date, such as "Fund Price Update @2023-05-05".</p>
+									<p>Remarks: To reuse the macro to update fund price in another date, press "Clear Data" button in the VBA macro to erase all the current data.
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p>67310662</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p>kurtislamtk@gmail.com</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+									<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

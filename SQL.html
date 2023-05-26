@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>SQL</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">home page</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Home page</a></li>
+							<li><a href="VBA.html">vba</a></li>
+							<li class="active"><a href="SQL.html">sql</a></li>
+							<li><a href="Tableau.html">tableau</a></li>
+							<li><a href="Python.html">python</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>SQL - E-COMMERCE DATA ANALYSIS PROJECT <br />
+									</h1>
+									<p>This article provides a detailed, step-by-step explanation on my SQL project. <br>
+									If you would like to review the full script, please visit my GitHub page at <a href="https://github.com/kurtislamtk/SQL_Portfolio_Project/tree/main"target="_blank">here</a>.</p>
+								</header>
+								<div class="image main"><img src="images/olistdata.webp" alt="" /></div>
+								<p>This is a public dataset of sales orders made in a Brazilian e-commerce franchise named Olist Store from 2016 to 2018. The dataset is downloaded from <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank">Kaggle</a>. There are a total of 9 CSV files, and their names and relationships are shown in the picture above. </p>
+								<p>Remark: "product_category_name_translation.csv" is not shown in the picture, as it contains the corresponding English translation of the product names and do not form a real connection with other datasets. </p>
+								<p>The key objectives of the projects are:<br>
+									1. Analyze customer behaviors, patterns and trends in 2017 <br>
+									2. Track and analyze seller performance based on order delivery in 2017
+								</p>
+								<p><strong>Part 1: Data cleaning and preparation</strong></p>
+								1. Translate product name from Brazilian to English
+								<pre><code style="white-space: pre-line;">UPDATE products
+									SET product_cat_name = prod_name_eng
+									FROM product_name_trans
+									WHERE products.product_cat_name = product_name_trans.prod_name
+								</code></pre>
+								2. Within the dataset, certain products are missing a defined category. I categorized them with 'uncatgorized' by replacing null value.
+								<pre><code style="white-space: pre-line;">UPDATE products
+									SET product_cat_name = 'uncatgorized'
+									WHERE product_cat_name IS NULL
+								</code></pre>
+								3. Delete orders with status 'unavailable' and 'canceled'
+								<pre><code style="white-space: pre-line;">DELETE FROM orders
+									WHERE order_status = 'unavailable' OR order_status = 'canceled'
+								</code></pre>
+								4. Delete orders in 2016 and 2018
+								<pre><code style="white-space: pre-line;">DELETE FROM orders
+									WHERE EXTRACT(YEAR FROM order_purchase_timestamp) = '2016' OR EXTRACT(YEAR FROM order_purchase_timestamp) = '2018'
+								</code></pre>
+								5. Insert column 'purchase month'(YYYY-MM) for future data exploration and filter use
+								<pre><code style="white-space: pre-line;">ALTER TABLE orders
+									ADD COLUMN order_purchase_month TYPE DATE
+									
+									UPDATE orders
+									SET order_purchase_month = order_purchase_timestamp
+									
+									ALTER TABLE orders
+									ALTER COLUMN order_purchase_month TYPE VARCHAR(50)
+									
+									UPDATE orders
+									SET order_purchase_month = TO_CHAR(TO_DATE(order_purchase_month, 'YYYY-MM'),'YYYY-MM')
+								</code></pre>
+								6. Clean unstandardized format, e.g. replace all '-' to ' ', change all first letter to uppercase
+								<pre><code style="white-space: pre-line;">UPDATE products
+									SET product_cat_name = REPLACE(product_cat_name, '_',' ')
+									
+									UPDATE products
+									SET product_cat_name = CONCAT(UPPER(LEFT(product_cat_name,1)),SUBSTRING(product_cat_name,2,LENGTH(product_cat_name)))
+									
+									UPDATE customers
+									SET customer_city = INITCAP(customer_city)
+								</code></pre>
+								<p><strong>Part 2: Customer analysis</strong></p>
+								1. Use view to create a customer order details table by joining different tables with related keys
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/code1.png" alt="" style="height: 300px;" /></div>
+								2. Segment customers into groups based on RFM model
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/code2.png" alt="" style="height: 600px;" /></div>
+								<p>The RFM model is a customer segmentation technique used in marketing analysis. RFM stands for <strong>Recency</strong>, <strong>Frequency</strong>, and <strong>Monetary Value</strong>, which are three key factors used to evaluate and segment customers based on their purchasing behavior. Here's a breakdown of each component:</p>
+								<p>1. <strong>Recency</strong>: How recently a customer has made the last purchase<br>
+								2. <strong>Frequency</strong>: How often a customer made the purchases<br>	
+								3. <strong>Monetary Value</strong>: How much money a customer spent on purchases</p>
+								<p>Use NTILE() to rank the customers from 1 to 5 to determine the score of Recency (R), Frequency (F) and Monetary Value (M) respectively. Based on the calculated score, customers are further grouped into different segment based on the criteria as listed in the table below.</p>
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/RFM.png" alt="" style="width: 400px;" />
+								  </div>	
+								<p>Source and more information about RFM model, please refer to the link <a href="https://www.putler.com/rfm-analysis/" target="_blank">here</a>.</p>
+								3. Number and percentage of each customer segment
+								<pre><code style="white-space: pre-line;">SELECT DISTINCT customer_category, COUNT(customer_category),
+									ROUND(CAST(COUNT(customer_category) AS numeric)/(SELECT COUNT(customer_id) FROM customer_segmentation) *100,2) percentage
+									FROM customer_segmentation
+									GROUP BY DISTINCT customer_category
+									ORDER BY 3 DESC
+								</code></pre>
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code4.png" alt="" style="width: 500px;" />
+								  </div><br><p></p>
+								4. Total number of orders, customers, cities, states
+								<pre><code style="white-space: pre-line;">SELECT COUNT(DISTINCT order_id) as order_total, COUNT(DISTINCT customer_id) customer_total, 
+									COUNT(DISTINCT customer_city) city_total, COUNT(DISTINCT customer_state) state_total
+									FROM customer_order_details
+								</code></pre>
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code5.png" alt="" style="width: 500px;" />
+								  </div><br><p></p>
+								5. Top 10 city with highest sales volumn and number of customers
+								<pre><code style="white-space: pre-line;">SELECT customer_city, customer_state, SUM(payment_value), COUNT(DISTINCT customer_id) 
+									FROM customer_order_details
+									GROUP BY customer_city, customer_state
+									ORDER BY 3 DESC
+									LIMIT 10
+								</code></pre>
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code6.png" alt="" style="width: 500px;" />
+								</div><br><p></p>
+								6. Sales volume per category per month
+								<pre><code style="white-space: pre-line;">SELECT order_purchase_month, product_cat_name, SUM(payment_value) 
+									FROM customer_order_details
+									GROUP BY order_purchase_month, product_cat_name
+									ORDER BY 1,2
+								</code></pre>
+								Output (partial result):
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code7.png" alt="" style="width: 500px;" />
+								</div><br><p></p>
+								<p><strong>Part 3: Seller analysis</strong></p>
+								1. Use view to create a seller table by joining different tables with related keys	
+								<pre><code style="white-space: pre-line;">DROP VIEW IF EXISTS seller_details
+									CREATE VIEW seller_details AS
+									SELECT ord.order_id, ord.order_delivered_customer_date, ord.order_estimated_delivery_date,
+									ord_i.seller_id, ord_review.review_score
+									FROM orders ord
+									JOIN order_items ord_i
+									ON ord.order_id = ord_i.order_id
+									JOIN order_review ord_review
+									ON ord.order_id = ord_review.order_id
+								</code></pre>
+								2. Check if the delivery date hit the target set for each order: 'Hit' if target is hit, 'Fail' if target is not hit
+								<pre><code style="white-space: pre-line;">SELECT order_id, seller_id, order_estimated_delivery_date, order_delivered_customer_date,
+									CASE
+										WHEN order_estimated_delivery_date >= order_delivered_customer_date THEN 'Hit'
+										ELSE 'Fail'
+									END target
+									FROM seller_details
+								</code></pre>	
+								Output (partial result):	
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code8.png" alt="" style="width: 800px;" />	
+								</div><br><p></p>
+								3. Check total orders, total number of fails of meeting the delivery target and fail percentage by each seller
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/code9.png" alt="" style="height: 300px;" /></div>
+								Output (partial result):	
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code10.png" alt="" style="width: 500px;" />	
+								</div><br><p></p>
+								4. Return average score of seller and total number of orders made
+								<pre><code style="white-space: pre-line;">SELECT seller_id, ROUND(AVG(review_score),2), COUNT(seller_id) FROM seller_details
+									GROUP BY seller_id
+									ORDER BY 3 DESC
+								</code></pre>	
+								Output (partial result):	
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code11.png" alt="" style="width: 400px;" />
+							</section>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p>67310662</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p>kurtislamtk@gmail.com</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+									<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

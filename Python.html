@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Python</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">home page</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Home page</a></li>
+							<li><a href="VBA.html">vba</a></li>
+							<li><a href="SQL.html">sql</a></li>
+							<li><a href="Tableau.html">tableau</a></li>
+							<li class="active"><a href="Python.html">python</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+							<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>PYTHON - WEBSCRAPING PROJECT<br />
+									</h1>
+									<p>This article provides a detailed, step-by-step explanation on my Python webscraping project on Jobsdb. <br>
+										If you would like to review the full code, please visit my GitHub page at <a href="https://github.com/kurtislamtk/Python_Portfolio_Project"target="_blank">here</a>.</p>
+								</header>
+								1. Import libraries
+								<pre><code style="white-space: pre-line;">import csv
+									from datetime import datetime
+									import requests
+									from bs4 import BeautifulSoup
+								</code></pre>
+								2. Start web scraping the Jobsdb website
+								<pre><code style="white-space: pre-line;">url = 'https://hk.jobsdb.com/hk/search-jobs/data-analyst/1'
+									html_text = requests.get(url).text
+									soup = BeautifulSoup(html_text, 'html.parser')
+									soup
+								</code></pre>	
+								3. In a standard Jobsdb website, different job is displayed on the left-hand side of the website
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/code12.png" alt="" style="height: 400px;" /></div>
+								Evaluate the structure of the html and create a list variable to store all of the job ad
+								<pre><code style="white-space: pre-line;">sectors = soup.find_all('div', class_='z1s6m00 _1hbhsw6n rqoqz1')
+									sectors
+								</code></pre>
+								4. Use the first job ad for further investigation
+								<pre><code style="white-space: pre-line;">sector = sectors[0]
+								</code></pre>
+								5. Find the job title of the first job ad
+								<pre><code style="white-space: pre-line;">sector.find('div',class_='z1s6m00 l3gun70 l3gun74 l3gun72').getText()
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code13.png" alt="" style="width: 600px;" />
+								  </div><br><p></p>
+								6. Find the company name of the first job ad
+								<pre><code style="white-space: pre-line;">sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i1 y44q7i21 y44q7ih').getText()
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code14.png" alt="" style="width: 700px;" />
+								</div><br><p></p>
+								7. Find the location of the first job ad
+								<pre><code style="white-space: pre-line;">sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i3 y44q7i21 y44q7ih').getText()
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code15.png" alt="" style="width: 700px;" />
+								  </div><br><p></p>
+								8. Find the description of the first job ad and perform data cleaning by using function
+								<pre><code style="white-space: pre-line;">import re
+								def add_space(text):
+									spaced_text = re.sub(r'(?&lt!^)(?=[A-Z])',' ',text)
+									return spaced_text
+									
+								add_space(sector.find('ul',class_='z1s6m00 z1s6m03 _5135ge0 _5135ge5').getText())
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code16.png" alt="" style="width: 700px;" />
+								</div><br><p></p>
+								9. Find the publishing date of the first job ad
+								<pre><code style="white-space: pre-line;">sector.find('time',class_='z1s6m00 _1hbhsw64y').getText()
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code17.png" alt="" style="width: 500px;" />
+								</div><br><p></p>
+								10. Find the date of performing web scraping (data extract date)
+								<pre><code style="white-space: pre-line;">today = datetime.today().strftime('%Y-%m-%d')
+								</code></pre>		
+								11. Create a function to include all the web scraping methods metioned above. Because not all job ads have a specific information, e.g. job location. Thus, "try and except" is used to avoid errors
+								<pre><code style="white-space: pre-line;">def get_record(sector):
+    
+									job_title = sector.find('div',class_='z1s6m00 l3gun70 l3gun74 l3gun72').getText()
+									
+									try:
+										company = sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i1 y44q7i21 y44q7ih').getText()
+									except AttributeError:
+										company = ''
+										
+									try:    
+										location = sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i3 y44q7i21 y44q7ih').getText()
+									except AttributeError:
+										location = ''
+										
+									try:
+										description = add_space(sector.find('ul',class_='z1s6m00 z1s6m03 _5135ge0 _5135ge5').getText())
+									except AttributeError:
+										description = ''
+										
+									post_date = sector.find('time',class_='z1s6m00 _1hbhsw64y').getText()
+									extract_date = datetime.today().strftime('%Y-%m-%d')
+									
+									record = (job_title, company, location, description, post_date, extract_date)
+									return record
+								</code></pre>	
+								12. Use a for loop to grab all the information of every job ad within a page
+								<pre><code style="white-space: pre-line;">records = []
+
+									for sector in sectors:
+										record = get_record(sector)
+										records.append(record)
+								</code></pre>
+								13. Investigate the result
+								<pre><code style="white-space: pre-line;">records
+								</code></pre>		
+								Output:
+								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
+									<img src="images/code19.png" alt="" style="width: 800px;" />
+								</div><br><p></p>
+								14. Investigate the code of the "next page" button of the website
+								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+									<img src="images/code20.png" alt="" style="height: 300px;" /></div>
+								Scape every page and escape the loop while no more "Next page" button in that page (i.e. final page is reached)
+								<pre><code style="white-space: pre-line;">while True:
+									try:
+										url ='https://hk.jobsdb.com' + soup.find('div', class_ = 'z1s6m00 _1hbhsw6ce _1hbhsw6p').a.get('href')
+									except AttributeError:
+										break
+									
+									html_text = requests.get(url).text
+									soup = BeautifulSoup(html_text,'html.parser')
+									sectors = soup.find_all('div', class_='z1s6m00 _1hbhsw6n rqoqz1')
+									
+									for sector in sectors:
+										record = get_record(sector)
+										records.append(record)
+								</code></pre>
+								15. Save the result in a csv file
+								<pre><code style="white-space: pre-line;">with open('result.csv','w',newline='',encoding='utf-8') as f:
+									writer = csv.writer(f)
+									writer.writerow(['Job_title','Company','Location','Description','Post_date','Extract_date'])
+									writer.writerows(records)
+								</code></pre>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p>67310662</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p>kurtislamtk@gmail.com</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/kurtis-lam-5362521b0/" target="_blank" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+									<li><a href="https://github.com/kurtislamtk?tab=repositories" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
