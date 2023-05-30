@@ -56,26 +56,26 @@
 									2. Track and analyze seller performance based on order delivery in 2017
 								</p>
 								<p><strong>Part 1: Data cleaning and preparation</strong></p>
-								1. Translate product name from Brazilian to English
+								1. Translate product name from Brazilian to English</b>
 								<pre><code style="white-space: pre-line;">UPDATE products
 									SET product_cat_name = prod_name_eng
 									FROM product_name_trans
 									WHERE products.product_cat_name = product_name_trans.prod_name
 								</code></pre>
-								2. Within the dataset, certain products are missing a defined category. I categorized them with 'uncatgorized' by replacing null value.
+								 2. Within the dataset, certain products are missing a defined category. I categorized them with 'uncatgorized' by replacing null value.</b>
 								<pre><code style="white-space: pre-line;">UPDATE products
 									SET product_cat_name = 'uncatgorized'
 									WHERE product_cat_name IS NULL
 								</code></pre>
-								3. Delete orders with status 'unavailable' and 'canceled'
+								 3. Delete orders with status 'unavailable' and 'canceled'</b>
 								<pre><code style="white-space: pre-line;">DELETE FROM orders
 									WHERE order_status = 'unavailable' OR order_status = 'canceled'
 								</code></pre>
-								4. Delete orders in 2016 and 2018
+								 4. Delete orders in 2016 and 2018</b>
 								<pre><code style="white-space: pre-line;">DELETE FROM orders
 									WHERE EXTRACT(YEAR FROM order_purchase_timestamp) = '2016' OR EXTRACT(YEAR FROM order_purchase_timestamp) = '2018'
 								</code></pre>
-								5. Insert column 'purchase month'(YYYY-MM) for future data exploration and filter use
+								 5. Insert column 'purchase month'(YYYY-MM) for future data exploration and filter use</b>
 								<pre><code style="white-space: pre-line;">ALTER TABLE orders
 									ADD COLUMN order_purchase_month TYPE DATE
 									
@@ -88,7 +88,7 @@
 									UPDATE orders
 									SET order_purchase_month = TO_CHAR(TO_DATE(order_purchase_month, 'YYYY-MM'),'YYYY-MM')
 								</code></pre>
-								6. Clean unstandardized format, e.g. replace all '-' to ' ', change all first letter to uppercase
+								 6. Clean unstandardized format, e.g. replace all '-' to ' ', change all first letter to uppercase</b>
 								<pre><code style="white-space: pre-line;">UPDATE products
 									SET product_cat_name = REPLACE(product_cat_name, '_',' ')
 									
@@ -99,10 +99,10 @@
 									SET customer_city = INITCAP(customer_city)
 								</code></pre>
 								<p><strong>Part 2: Customer analysis</strong></p>
-								1. Use view to create a customer order details table by joining different tables with related keys
+								 1. Use view to create a customer order details table by joining different tables with related keys</b>
 								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 									<img src="images/code1.png" alt="" style="height: 300px;" /></div>
-								2. Segment customers into groups based on RFM model
+								 2. Segment customers into groups based on RFM model</b>
 								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 									<img src="images/code2.png" alt="" style="height: 600px;" /></div>
 								<p>The RFM model is a customer segmentation technique used in marketing analysis. RFM stands for <strong>Recency</strong>, <strong>Frequency</strong>, and <strong>Monetary Value</strong>, which are three key factors used to evaluate and segment customers based on their purchasing behavior. Here's a breakdown of each component:</p>
@@ -114,7 +114,7 @@
 									<img src="images/RFM.png" alt="" style="width: 400px;" />
 								  </div>	
 								<p>Source and more information about RFM model, please refer to the link <a href="https://www.putler.com/rfm-analysis/" target="_blank">here</a>.</p>
-								3. Number and percentage of each customer segment
+								 3. Number and percentage of each customer segment</b>
 								<pre><code style="white-space: pre-line;">SELECT DISTINCT customer_category, COUNT(customer_category),
 									ROUND(CAST(COUNT(customer_category) AS numeric)/(SELECT COUNT(customer_id) FROM customer_segmentation) *100,2) percentage
 									FROM customer_segmentation
@@ -125,7 +125,7 @@
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code4.png" alt="" style="width: 500px;" />
 								  </div><br><p></p>
-								4. Total number of orders, customers, cities, states
+								 4. Total number of orders, customers, cities, states</b>
 								<pre><code style="white-space: pre-line;">SELECT COUNT(DISTINCT order_id) as order_total, COUNT(DISTINCT customer_id) customer_total, 
 									COUNT(DISTINCT customer_city) city_total, COUNT(DISTINCT customer_state) state_total
 									FROM customer_order_details
@@ -134,7 +134,7 @@
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code5.png" alt="" style="width: 500px;" />
 								  </div><br><p></p>
-								5. Top 10 city with highest sales volumn and number of customers
+								 5. Top 10 city with highest sales volumn and number of customers</b>
 								<pre><code style="white-space: pre-line;">SELECT customer_city, customer_state, SUM(payment_value), COUNT(DISTINCT customer_id) 
 									FROM customer_order_details
 									GROUP BY customer_city, customer_state
@@ -145,7 +145,7 @@
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code6.png" alt="" style="width: 500px;" />
 								</div><br><p></p>
-								6. Sales volume per category per month
+								 6. Sales volume per category per month</b>
 								<pre><code style="white-space: pre-line;">SELECT order_purchase_month, product_cat_name, SUM(payment_value) 
 									FROM customer_order_details
 									GROUP BY order_purchase_month, product_cat_name
@@ -156,7 +156,7 @@
 									<img src="images/code7.png" alt="" style="width: 500px;" />
 								</div><br><p></p>
 								<p><strong>Part 3: Seller analysis</strong></p>
-								1. Use view to create a seller table by joining different tables with related keys	
+								 1. Use view to create a seller table by joining different tables with related keys</b>
 								<pre><code style="white-space: pre-line;">DROP VIEW IF EXISTS seller_details
 									CREATE VIEW seller_details AS
 									SELECT ord.order_id, ord.order_delivered_customer_date, ord.order_estimated_delivery_date,
@@ -167,7 +167,7 @@
 									JOIN order_review ord_review
 									ON ord.order_id = ord_review.order_id
 								</code></pre>
-								2. Check if the delivery date hit the target set for each order: 'Hit' if target is hit, 'Fail' if target is not hit
+								 2. Check if the delivery date hit the target set for each order: 'Hit' if target is hit, 'Fail' if target is not hit</b>
 								<pre><code style="white-space: pre-line;">SELECT order_id, seller_id, order_estimated_delivery_date, order_delivered_customer_date,
 									CASE
 										WHEN order_estimated_delivery_date >= order_delivered_customer_date THEN 'Hit'
@@ -179,14 +179,14 @@
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code8.png" alt="" style="width: 800px;" />	
 								</div><br><p></p>
-								3. Check total orders, total number of fails of meeting the delivery target and fail percentage by each seller
+								 3. Check total orders, total number of fails of meeting the delivery target and fail percentage by each seller</b>
 								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 									<img src="images/code9.png" alt="" style="height: 300px;" /></div>
 								Output (partial result):	
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code10.png" alt="" style="width: 500px;" />	
 								</div><br><p></p>
-								4. Return average score of seller and total number of orders made
+								4. Return average score of seller and total number of orders made</b>
 								<pre><code style="white-space: pre-line;">SELECT seller_id, ROUND(AVG(review_score),2), COUNT(seller_id) FROM seller_details
 									GROUP BY seller_id
 									ORDER BY 3 DESC
