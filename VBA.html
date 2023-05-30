@@ -49,20 +49,20 @@
 										If you would like to review the VBA macro file and the full code script, please visit my GitHub page at <a href="https://github.com/kurtislamtk/VBA_Portfolio_Project"target="_blank">here</a>.</p>
 									</header>
 									<p>In this project, the key objective is to automate the process of updating fund price to enhance efficiency. The data source from this project is fund price data obtained from multiple fund houses. The fund prices are publicly available and can be accessed through the internet.</p>
-									1. Prepare data sourcce
+									<b>1. Prepare data source</b>
 									<p>The fund price data is collected and downloaded into a designated folder. In this project, the fund prices for the date 5/5 are gathered, and it is assumed that a total of 24 fund prices will be updated.</p>
 									<p>Furthermore, exchange rates will also be updated in this project. The exchange rate data is collected from the HKAB website and the rates are manually inputted into an Excel file named "Fx rate template".</p>
 									Fx rate template:
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/code25.png" alt="" style="width: 400px; height: 300px;" /></div>
-									2. Input fund price date
+									<b>2. Input fund price date</b>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/code21.png" alt="" style="width: 700px; height: 300px;" /></div>
 									<p>Press "Start" button in the VBA macro to execute the macro.</p>	
 									<p>An interactive box will prompt the user to enter the date of the fund price (i.e. 2023-05-05 in this project). A loop mechanism ensures that only valid dates are accepted, prompting the user to re-enter if an invalid date is provided.</p>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/code22.png" alt="" style="width: 400px; height: 200px;" /></div>
-									3. Merge data source to the excel
+									<b>3. Merge data source to the excel</b>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/code23.png" alt="" style="width: 950px; height: 300px;" /></div>
 										Another interactive box will appear, allowing the user to select the desired data source. Once selected, the data source will be merged into the macro excel file as individual spreadsheets.
@@ -71,7 +71,7 @@
 									Result:
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/spreadsheet.png" alt="" style="width: 600px; height: 40px;" /></div>
-									4. Find fund price from data source
+									<b>4. Find fund price from data source</b>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/code26.png" alt="" style="width: 700px; height: 300px;" /></div>
 									(Partial code is shown, i.e. only code of Fund1 and Fund2)
@@ -79,14 +79,14 @@
 									Result:
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/price.png" alt="" style="width: 800px; height: 300px;" /></div>
-									5. Find exchange rate from data source
+									<b>5. Find exchange rate from data source</b>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/fx rate.png" alt="" style="width: 600px; height: 300px;" /></div>
 									<p>The VBA macro will automatically update the exchange rate using the same approach.</p>
 									Result:
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/fx.png" alt="" style="width: 550px; height: 100px;" /></div>
-									6. Save the file as a new excel to a designated path
+									<b>6. Save the file as a new excel to a designated path</b>
 									<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 										<img src="images/save.png" alt="" style="width: 550px; height: 150px;" /></div>
 									<p>Upon completion, the file will be automatically saved with a name corresponding to the fund price date, such as "Fund Price Update @2023-05-05".</p>
