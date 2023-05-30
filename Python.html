@@ -48,50 +48,50 @@
 									<p>This article provides a detailed, step-by-step explanation on my Python webscraping project on Jobsdb. <br>
 										If you would like to review the full code, please visit my GitHub page at <a href="https://github.com/kurtislamtk/Python_Portfolio_Project"target="_blank">here</a>.</p>
 								</header>
-								1. Import libraries
+								<b>1. Import libraries</b>
 								<pre><code style="white-space: pre-line;">import csv
 									from datetime import datetime
 									import requests
 									from bs4 import BeautifulSoup
 								</code></pre>
-								2. Start web scraping the Jobsdb website
+								<b>2. Start web scraping the Jobsdb website</b>
 								<pre><code style="white-space: pre-line;">url = 'https://hk.jobsdb.com/hk/search-jobs/data-analyst/1'
 									html_text = requests.get(url).text
 									soup = BeautifulSoup(html_text, 'html.parser')
 									soup
 								</code></pre>	
-								3. In a standard Jobsdb website, different job is displayed on the left-hand side of the website
+								<b>3. In a standard Jobsdb website, different job is displayed on the left-hand side of the website</b>
 								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 									<img src="images/code12.png" alt="" style="height: 400px;" /></div>
 								Evaluate the structure of the html and create a list variable to store all of the job ad
 								<pre><code style="white-space: pre-line;">sectors = soup.find_all('div', class_='z1s6m00 _1hbhsw6n rqoqz1')
 									sectors
 								</code></pre>
-								4. Use the first job ad for further investigation
+								<b>4. Use the first job ad for further investigation</b>
 								<pre><code style="white-space: pre-line;">sector = sectors[0]
 								</code></pre>
-								5. Find the job title of the first job ad
+								<b>5. Find the job title of the first job ad</b>
 								<pre><code style="white-space: pre-line;">sector.find('div',class_='z1s6m00 l3gun70 l3gun74 l3gun72').getText()
 								</code></pre>		
 								Output:
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code13.png" alt="" style="width: 600px;" />
 								  </div><br><p></p>
-								6. Find the company name of the first job ad
+								<b>6. Find the company name of the first job ad</b>
 								<pre><code style="white-space: pre-line;">sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i1 y44q7i21 y44q7ih').getText()
 								</code></pre>		
 								Output:
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code14.png" alt="" style="width: 700px;" />
 								</div><br><p></p>
-								7. Find the location of the first job ad
+								<b>7. Find the location of the first job ad</b>
 								<pre><code style="white-space: pre-line;">sector.find('span',class_='z1s6m00 _1hbhsw64y y44q7i0 y44q7i3 y44q7i21 y44q7ih').getText()
 								</code></pre>		
 								Output:
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code15.png" alt="" style="width: 700px;" />
 								  </div><br><p></p>
-								8. Find the description of the first job ad and perform data cleaning by using function
+								<b>8. Find the description of the first job ad and perform data cleaning by using function</b>
 								<pre><code style="white-space: pre-line;">import re
 								def add_space(text):
 									spaced_text = re.sub(r'(?&lt!^)(?=[A-Z])',' ',text)
@@ -103,17 +103,17 @@
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code16.png" alt="" style="width: 700px;" />
 								</div><br><p></p>
-								9. Find the publishing date of the first job ad
+								<b>9. Find the publishing date of the first job ad</b>
 								<pre><code style="white-space: pre-line;">sector.find('time',class_='z1s6m00 _1hbhsw64y').getText()
 								</code></pre>		
 								Output:
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code17.png" alt="" style="width: 500px;" />
 								</div><br><p></p>
-								10. Find the date of performing web scraping (data extract date)
+								<b>10. Find the date of performing web scraping (data extract date)</b>
 								<pre><code style="white-space: pre-line;">today = datetime.today().strftime('%Y-%m-%d')
 								</code></pre>		
-								11. Create a function to include all the web scraping methods metioned above. Because not all job ads have a specific information, e.g. job location. Thus, "try and except" is used to avoid errors
+								<b>11. Create a function to include all the web scraping methods metioned above. Because not all job ads have a specific information, e.g. job location. Thus, "try and except" is used to avoid errors</b>
 								<pre><code style="white-space: pre-line;">def get_record(sector):
     
 									job_title = sector.find('div',class_='z1s6m00 l3gun70 l3gun74 l3gun72').getText()
@@ -139,21 +139,21 @@
 									record = (job_title, company, location, description, post_date, extract_date)
 									return record
 								</code></pre>	
-								12. Use a for loop to grab all the information of every job ad within a page
+								<b>12. Use a for loop to grab all the information of every job ad within a page</b>
 								<pre><code style="white-space: pre-line;">records = []
 
 									for sector in sectors:
 										record = get_record(sector)
 										records.append(record)
 								</code></pre>
-								13. Investigate the result
+								<b>13. Investigate the result</b>
 								<pre><code style="white-space: pre-line;">records
 								</code></pre>		
 								Output:
 								<div class="image main" style="text-align: center; margin-top: -5px; margin-bottom: -5px;">
 									<img src="images/code19.png" alt="" style="width: 800px;" />
 								</div><br><p></p>
-								14. Investigate the code of the "next page" button of the website
+								<b>14. Investigate the code of the "next page" button of the website</b>
 								<div class="image main" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
 									<img src="images/code20.png" alt="" style="height: 300px;" /></div>
 								Scape every page and escape the loop while no more "Next page" button in that page (i.e. final page is reached)
@@ -171,7 +171,7 @@
 										record = get_record(sector)
 										records.append(record)
 								</code></pre>
-								15. Save the result in a csv file
+								<b>15. Save the result in a csv file</b>
 								<pre><code style="white-space: pre-line;">with open('result.csv','w',newline='',encoding='utf-8') as f:
 									writer = csv.writer(f)
 									writer.writerow(['Job_title','Company','Location','Description','Post_date','Extract_date'])
